@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  bot:
+    networks:
+      - new
+    build:
+      context: thehousewolf
+      dockerfile: thehousewolf/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+
+  redis:
+    restart: always
+    image: redis:latest
+    networks:
+      - new
+    volumes:
+      - ./redisdata:/data
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+networks:
+  new:
+    driver: bridge
