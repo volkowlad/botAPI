@@ -1,8 +1,8 @@
 package redisdb
 
 import (
-	"botAPI/internal/config"
 	"errors"
+	"github.com/th1nksnow/thehousewolf/internal/config"
 	"log/slog"
 )
 
