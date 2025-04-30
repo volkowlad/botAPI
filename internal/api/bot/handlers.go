@@ -3,12 +3,18 @@ package bot
 import (
 	"context"
 	"fmt"
+	"gopkg.in/telebot.v4"
 	"log/slog"
 	"strconv"
 	"strings"
 )
 
 func (w *Wrapper) textHandler(c telebot.Context) error {
+	id := c.Chat().ID
+	mtx := getChatMutex(id)
+	mtx.Lock()
+	defer mtx.Unlock()
+
 	ctx := context.TODO()
 
 	txt := c.Text()
@@ -16,7 +22,6 @@ func (w *Wrapper) textHandler(c telebot.Context) error {
 	if string([]rune(txt)[:4]) == w.config.Name {
 		message := strings.ReplaceAll(txt, w.config.Name, "")
 
-		id := c.Chat().ID
 		idStr := strconv.Itoa(int(id))
 		userName := c.Sender().Username
 
@@ -67,4 +72,14 @@ func (w *Wrapper) deleteHandler(c telebot.Context) error {
 	}
 
 	return c.Send("Волк стал одиноким в этом обсуждении")
+}
+
+func (w *Wrapper) helloHandler(c telebot.Context) error {
+	id := c.Chat().ID
+	slog.Info(fmt.Sprintf("add to new chat %v", id))
+
+	return c.Send(fmt.Sprintf(`Я личный бот-помощник - Волк
+Покажите как вы умеете выть, чтобы попасть ко мне в стаю
+Напишите %s, чтобы ваш клич был услышан
+А также не забудьте сделать меня админом, чтобы я мог отправять сообщения😉`, codeCall))
 }

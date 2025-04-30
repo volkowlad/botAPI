@@ -8,6 +8,7 @@ import (
 	"github.com/th1nksnow/thehousewolf/internal/redisdb"
 	"log/slog"
 	"os"
+	"time"
 )
 
 func main() {
@@ -40,6 +41,8 @@ func main() {
 		os.Exit(1)
 	}
 	log.Info("init bot success")
+
+	bot.StartCleanupRoutine(10 * time.Minute)
 
 	err = botWrapper.Start(ctx)
 	if err != nil {

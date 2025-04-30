@@ -60,4 +60,5 @@ func (w *Wrapper) prepare() {
 	w.bot.Handle(codeCall, w.startHandler)
 	w.bot.Handle(telebot.OnText, w.textHandler)
 	w.bot.Handle(deleteCall, w.deleteHandler)
+	w.bot.Handle(telebot.OnAddedToGroup, w.helloHandler)
 }
